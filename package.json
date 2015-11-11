@@ -1,7 +1,7 @@
 {
-  "name": "hazri-sv",
+  "name": "Hazri-SV",
   "version": "1.1.1",
-  "description": "hazri-sv: An Ionic project",
+  "description": "Hazri-SV: Instant Attendance notifier app for students",
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^2.0.4",
@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "bower": "^1.3.3",
+    "gulp-install": "^0.6.0",
     "gulp-util": "^2.2.14",
     "shelljs": "^0.3.0"
   },
@@ -22,5 +23,7 @@
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard"
   ],
-  "cordovaPlatforms": []
+  "cordovaPlatforms": [
+    "android"
+  ]
 }
