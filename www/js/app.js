@@ -25,7 +25,18 @@
                url: "/studentview",
                templateUrl: "templates/student_view.html",
                controller: 'StudentViewCtrl'  
+           })
+           
+           .state('notifications',{
+               url:"/notifications",
+               templateUrl:"templates/notifications.html",
+               controller:'notificationsctrl'
            });
 
     $urlRouterProvider.otherwise('/login');
+})
+
+.factory("notifications", function($firebaseArray) {
+  var itemsRef = new Firebase('https://hazri.firebaseio.com/notifications');
+  return $firebaseArray(itemsRef);
 });

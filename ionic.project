@@ -1,6 +1,5 @@
 {
   "name": "Hazri-SV",
-  "app_id": "9e0797e1",
   "defaultBrowser": "chrome",
   "gulpStartupTasks": [
     "sass",

@@ -9091,3 +9091,9 @@ a.button {
 
 .wrap {
   padding: 10px 10px 10px 10px; }
+
+.center {
+  text-align: center; }
+
+.right {
+  text-align: right; }

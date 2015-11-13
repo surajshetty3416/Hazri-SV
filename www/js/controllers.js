@@ -8,10 +8,6 @@
 })
 
 .controller("StudentViewCtrl", function ($scope, $ionicModal, $ionicPopup, $firebaseArray) {
-    var ref = new Firebase("https://hazri.firebaseio.com/");
-    // create a synchronized array
-    $scope.collection = $firebaseArray(ref);
-
     $scope.highchartsNG = {
         options: {
             chart: {
@@ -58,9 +54,36 @@
         loading: false
     }
 
+})
 
 
+.controller("notificationsctrl", function ($scope, notifications, $timeout) {
+    
+    //fb rules change for access ".write": "auth.uid == '002a448c-30c0-4b87-a16b-f70dfebe3386'"
+     $scope.limit=2;
+     $scope.canload= true;
+     $scope.items = notifications;
+     
+     $scope.loadolder = function(){
+         if($scope.items.length>$scope.limit)
+         $scope.limit +=2;
+         else
+         $scope.canload = false;
+     };
+     $scope.doRefresh = function() {
+    $timeout( function() {
+     $scope.limit=2;
+     $scope.canload= true;
+     $scope.items = notifications;
+      $scope.$broadcast('scroll.refreshComplete');
+    }, 1000);
+      
+  };
+  
+})
 
-
-
-});
+.filter('reverse', function() {
+  return function(items) {
+    return items.slice().reverse();
+  };
+})
