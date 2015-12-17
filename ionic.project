@@ -1,6 +1,6 @@
 {
   "name": "Hazri-SV",
-  "defaultBrowser": "chrome",
+  "defaultBrowser": "ucbrowser",
   "gulpStartupTasks": [
     "sass",
     "watch"
@@ -8,5 +8,6 @@
   "watchPatterns": [
     "www/**/*",
     "!www/lib/**/*"
-  ]
+  ],
+  "app_id": "7096ff5b"
 }

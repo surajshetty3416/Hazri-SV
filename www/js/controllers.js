@@ -7,8 +7,29 @@
    
 })
 
-.controller("StudentViewCtrl", function ($scope, $ionicModal, $ionicPopup, $firebaseArray) {
-    $scope.highchartsNG = {
+.controller("StudentViewCtrl", function ($scope, $ionicModal, $ionicPopup, $firebaseArray,$http) {
+    var alldata,pratt=[],thatt=[],prtot=[],thtot=[],prsub=[],thsub=[];
+    $http({method: 'GET', url: 'http://cors.io/?u=http://bvcoeportal.orgfree.com/hazrimaterial/api/index.php/cs/be/7/4.json'}).
+        then(function successCallback(response) {
+            alldata=response.data;
+            console.log(alldata);
+            alldata.forEach(function(element) {
+                if (element.type == 'pr') {
+                    pratt.push(element.att);
+                    prtot.push(element.totalAtt);
+                    prsub.push(element.sname);
+                }
+                if (element.type == 'th') {
+                    thatt.push(element.att);
+                    thtot.push(element.totalAtt);
+                    thsub.push(element.sname);
+                }
+            }, this);
+            
+        }, function errorCallback(response) {
+  });
+    
+    $scope.theory = {
         options: {
             chart: {
                 type: 'column'
@@ -25,11 +46,7 @@
             title: {
                 text: 'Subjects'
             },
-            categories: [
-                'ERP',
-                'AI',
-                'DSP'
-            ],
+            categories: thsub,
             crosshair: true
         },
         yAxis: {
@@ -41,19 +58,59 @@
         series: [{
             name: 'Total Lectures',
             color: 'rgba(165,170,217,.5)',
-            data: [15,11,25]        
+            data: thtot        
         }, {
             name: 'Attended',
             color: 'rgba(94,203,141,1)',
-            data: [10,9,20],
+            data: thatt,
             pointPadding: 0.2
         }],
         title: {
-            text: 'Your Attendance Stats'
+            text: 'Theory Attendance'
         },
         loading: false
     }
-
+$scope.practical = {
+        options: {
+            chart: {
+                type: 'column'
+            },
+            plotOptions: {
+                column: {
+                    grouping: false,
+                    shadow: false,
+                    borderWidth: 0
+                }
+            }
+        },
+        xAxis: {
+            title: {
+                text: 'Subjects'
+            },
+            categories: prsub,
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'No. of Lectures'
+            }
+        },
+        series: [{
+            name: 'Total Lectures',
+            color: 'rgba(165,170,217,.5)',
+            data: prtot        
+        }, {
+            name: 'Attended',
+            color: 'rgba(94,203,141,1)',
+            data: pratt,
+            pointPadding: 0.2
+        }],
+        title: {
+            text: 'Practical Attendance'
+        },
+        loading: false
+    }
 })
 
 
