@@ -8,8 +8,8 @@
 })
 
 .controller("StudentViewCtrl", function ($scope, $ionicModal, $ionicPopup, $firebaseArray,$http) {
-    var alldata,pratt=[],thatt=[],prtot=[],thtot=[],prsub=[],thsub=[];
-    $http({method: 'GET', url: 'http://cors.io/?u=http://bvcoeportal.orgfree.com/hazrimaterial/api/index.php/cs/be/7/4.json'}).
+    var alldata,pratt=[],thatt=[],prtot=[],thtot=[],prsub=[],thsub=[],percent,totatt=0,atatt=0,present=['Present'],absent=['Absent'];
+    $http({method: 'GET', url: 'http://cors.io/?u=http://bvcoeportal.orgfree.com/hazrimaterial/api/index.php/cs/be/7/49.json'}).
         then(function successCallback(response) {
             alldata=response.data;
             console.log(alldata);
@@ -18,13 +18,23 @@
                     pratt.push(element.att);
                     prtot.push(element.totalAtt);
                     prsub.push(element.sname);
+                    totatt += element.totalAtt;
+                    atatt += element.att;
+                   // console.log(totatt);
                 }
                 if (element.type == 'th') {
                     thatt.push(element.att);
                     thtot.push(element.totalAtt);
                     thsub.push(element.sname);
+                    totatt += element.totalAtt;
+                    atatt += element.att;
                 }
             }, this);
+            percent=atatt/totatt*100;
+            present.push(percent);
+            percent=100-percent;
+            absent.push(percent);
+            //console.log(absent);
             
         }, function errorCallback(response) {
   });
@@ -109,6 +119,40 @@ $scope.practical = {
         title: {
             text: 'Practical Attendance'
         },
+        loading: false
+    }
+    
+    
+    $scope.pie = {
+        options:
+        {
+            chart: {
+                type: 'pie',
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: 'Total attendance percent'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        enabled: false
+                    },
+                } 
+                }
+            },
+            series: [{
+                type: 'pie',
+                name:'percent',
+                colorByPoint: true,
+                data: [present,absent]
+            }],
+        
         loading: false
     }
 })
