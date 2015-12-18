@@ -1,15 +1,59 @@
 ﻿angular.module('HazriSV.controllers', ['ionic','firebase','highcharts-ng'])
 
-.controller('loginCtrl', function ($scope, $ionicModal, $timeout) {
-
-
-    
-   
+.controller('detailsCtrl', function ($scope, $ionicModal, $timeout,$firebase,$ionicLoading,details) {
+$scope.detail = {
+    dept: null,
+    year:null,
+    rollno:null,
+    semoption:[],
+    nameoption:[]
+   };
+  $scope.reset = function(){
+      $scope.detail.year=null;
+      $scope.detail.sem=null;
+      $scope.detail.rollno=null;
+      $scope.detail.nameoption=[];
+   };
+   $scope.providesemop = function(){
+       if ($scope.detail.year == "fe") {
+        $scope.detail.semoption = [{id: '1', name: 'Semester 1'},{id: '2', name: 'Semester 2'}];      
+        }
+        if ($scope.detail.year == "se") {
+        $scope.detail.semoption = [{id: '3', name: 'Semester 3'},{id: '4', name: 'Semester 4'}];      
+        }
+        if ($scope.detail.year == "te") {
+        $scope.detail.semoption = [{id: '5', name: 'Semester 5'},{id: '6', name: 'Semester 6'}];      
+        }
+        if ($scope.detail.year == "be") {
+        $scope.detail.semoption = [{id: '7', name: 'Semester 7'},{id: '8', name: 'Semester 8'}];      
+        }
+   }
+   $scope.providenameop = function(){
+       $ionicLoading.show({
+                        template: '<ion-spinner icon="android" ></ion-spinner>',
+                        animation: 'fade-in',
+                        showBackdrop: true,
+                        maxWidth: 250
+                    });
+       $scope.detail.nameoption = [];
+       var ref = new Firebase("https://hazri.firebaseio.com/students/"+$scope.detail.dept);
+        ref.on("child_added", function(snapshot, prevChildKey) {
+             var data = snapshot.val();
+            if(data.year == $scope.detail.year)
+            {
+                $scope.detail.nameoption.push({name:data.name,rollno:data.rollno})
+            }
+        });
+        $timeout(function(){
+                $ionicLoading.hide();  
+             },2000);
+   }
+   details.dataObj=$scope.detail;
 })
 
-.controller("StudentViewCtrl", function ($scope, $ionicModal, $ionicPopup, $firebaseArray,$http) {
+.controller("StudentViewCtrl", function ($scope, $ionicModal, $ionicPopup, $firebaseArray,$http,details) {
     var alldata,pratt=[],thatt=[],prtot=[],thtot=[],prsub=[],thsub=[],percent,totatt=0,atatt=0,present=['Present'],absent=['Absent'];
-    $http({method: 'GET', url: 'http://cors.io/?u=http://bvcoeportal.orgfree.com/hazrimaterial/api/index.php/cs/be/7/49.json'}).
+    $http({method: 'GET', url: 'http://cors.io/?u=http://bvcoeportal.orgfree.com/hazrimaterial/api/index.php/'+details.dataObj.dept+'/'+details.dataObj.year+'/'+details.dataObj.sem+'/'+details.dataObj.rollno+'.json'}).
         then(function successCallback(response) {
             alldata=response.data;
             console.log(alldata);
@@ -103,7 +147,7 @@ $scope.practical = {
         yAxis: {
             min: 0,
             title: {
-                text: 'No. of Lectures'
+                text: 'No. of Practicals'
             }
         },
         series: [{
@@ -187,4 +231,4 @@ $scope.practical = {
   return function(items) {
     return items.slice().reverse();
   };
-})
+});

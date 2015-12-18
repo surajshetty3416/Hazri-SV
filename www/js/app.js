@@ -1,6 +1,4 @@
-﻿/* global Firebase */
-/* global Ionic */
-angular.module('HazriSV', ['ionic','ionic.service.core','ionic.service.analytics', 'firebase' ,'HazriSV.controllers'])
+﻿angular.module('HazriSV', ['ionic','ionic.service.core','ionic.service.analytics', 'firebase' ,'HazriSV.controllers'])
 
 .run(function ($ionicPlatform,$ionicAnalytics) {
     $ionicPlatform.ready(function () {
@@ -46,9 +44,9 @@ angular.module('HazriSV', ['ionic','ionic.service.core','ionic.service.analytics
     $stateProvider
 
       .state('login', {
-          url: '/login',
-          templateUrl: 'templates/login.html',
-          controller: 'loginCtrl'
+          url: '/details',
+          templateUrl: 'templates/details.html',
+          controller: 'detailsCtrl'
       })
 
            .state('studentview', {
@@ -63,10 +61,15 @@ angular.module('HazriSV', ['ionic','ionic.service.core','ionic.service.analytics
                controller:'notificationsctrl'
            });
 
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/details');
 })
 
 .factory("notifications", function($firebaseArray) {
   var itemsRef = new Firebase('https://hazri.firebaseio.com/notifications');
   return $firebaseArray(itemsRef);
-});
+})
+
+.service('details', function() {
+        var _dataObj = {};
+        this.dataObj = _dataObj;
+    });
