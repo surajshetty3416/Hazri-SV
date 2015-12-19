@@ -1,75 +1,81 @@
-﻿angular.module('HazriSV', ['ionic','ionic.service.core','ionic.service.analytics', 'firebase' ,'HazriSV.controllers'])
+﻿angular.module('HazriSV', ['ionic', 'ionic.service.core', 'ionic.service.analytics', 'firebase', 'HazriSV.controllers'])
 
-.run(function ($ionicPlatform,$ionicAnalytics) {
-    $ionicPlatform.ready(function () {
-        $ionicAnalytics.register();
-        if (window.StatusBar) {
-            if (ionic.Platform.isAndroid()) {
-                StatusBar.backgroundColorByHexString("#388E3C");
-            } else {
-                StatusBar.styleLightContent();
+    .run(function ($ionicPlatform, $ionicAnalytics) {
+        $ionicPlatform.ready(function () {
+            $ionicAnalytics.register();
+            if (window.StatusBar) {
+                if (ionic.Platform.isAndroid()) {
+                    StatusBar.backgroundColorByHexString("#387ef5");
+                } else {
+                    StatusBar.styleLightContent();
+                }
+
             }
-            
-        }
-         
-        Ionic.io();
-        var push = new Ionic.Push({
-                "onNotification" : function(notification){
+
+            Ionic.io();
+            var push = new Ionic.Push({
+                "onNotification": function (notification) {
                     alert('Notification recieved!!!');
                 },
-                "pluginConfig":{
-                    "android":{
+                "pluginConfig": {
+                    "android": {
                         "iconColor": "#0000FF"
                     }
                 }
             });
-            
-          var user = Ionic.User.current();
-          if(!user.id){
-              user.id = Ionic.User.anonymousId();
-          }  
-          user.set('Name','Suraj');
-          user.set('Bio','Programmer');
-          user.save();
-          
-          var callback = function(){
-              push.addTokenToUser(user);
-              user.save();
-          };
-          push.register(callback)
-    });
-})
 
-.config(function ($stateProvider, $urlRouterProvider) {
-    $stateProvider
+            var user = Ionic.User.current();
+            if (!user.id) {
+                user.id = Ionic.User.anonymousId();
+            }
+            user.set('Name', 'Suraj');
+            user.set('Bio', 'Programmer');
+            user.save();
 
-      .state('login', {
-          url: '/details',
-          templateUrl: 'templates/details.html',
-          controller: 'detailsCtrl'
-      })
+            var callback = function () {
+                push.addTokenToUser(user);
+                user.save();
+            };
+            push.register(callback)
+        });
+    })
 
-           .state('studentview', {
-               url: "/studentview",
-               templateUrl: "templates/student_view.html",
-               controller: 'StudentViewCtrl'  
-           })
-           
-           .state('notifications',{
-               url:"/notifications",
-               templateUrl:"templates/notifications.html",
-               controller:'notificationsctrl'
-           });
+    .config(function ($stateProvider, $urlRouterProvider) {
+        $stateProvider
 
-    $urlRouterProvider.otherwise('/details');
-})
+            .state('login', {
+                url: '/details',
+                templateUrl: 'templates/details.html',
+                controller: 'detailsCtrl'
+            })
 
-.factory("notifications", function($firebaseArray) {
-  var itemsRef = new Firebase('https://hazri.firebaseio.com/notifications');
-  return $firebaseArray(itemsRef);
-})
+            .state('studentview', {
+                url: "/studentview",
+                templateUrl: "templates/student_view.html",
+                controller: 'StudentViewCtrl'
+            })
 
-.service('details', function() {
+            .state('notifications', {
+                url: "/notifications",
+                templateUrl: "templates/notifications.html",
+                controller: 'notificationsctrl'
+            })
+
+            .state('option', {
+                url: '/option',
+                templateUrl: 'templates/option.html',
+                controller: 'optionCtrl'
+            });
+
+        $urlRouterProvider.otherwise('/details');
+    })
+
+    .factory("notifications", function ($firebaseArray) {
+        var itemsRef = new Firebase('https://hazri.firebaseio.com/notifications');
+        return $firebaseArray(itemsRef);
+    })
+
+    .service('details', function () {
         var _dataObj = {};
         this.dataObj = _dataObj;
     });

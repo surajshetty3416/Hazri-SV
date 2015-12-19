@@ -1,51 +1,64 @@
-﻿<ion-view view-title="Student Detail">
-    <ion-header-bar>
+﻿<ion-view>
+    <ion-header-bar align-title="left" class="bar-balanced">
         <h1 class="title">Student Detail</h1>
         <div class="buttons">
-            <button class="button button-icon icon ion-android-notifications" ui-sref="notifications"></button>
+            <button class="button button-icon icon ion-navicon-round" ui-sref="option"></button>
+            <!--<<ion-nav-button><button class="button button-icon icon ion-android-notifications" ui-sref="notifications"></button>
+            span class="badge badge-assertive" >3</span>
+            </ion-nav-button>-->
+            
         </div>
     </ion-header-bar>
     <ion-content>
-        <div class="wrap" ng-controller="detailsCtrl">
-            <form name="details">
+
+        <div class="wrap">
+            <div class="circle center">
+                <div class="circle1 waves-effect"></div>
+            </div>
+
+            <form name="details" style="width:80%;margin:0 auto;">
                 <label class="item item-input item-select">
-                <span class="input-label">Deparment</span>
-                <select name="deparment" id="deparment" ng-model="detail.dept" ng-change="reset()">
-                    <option value="cs" selected>Computer</option>
-                    <option value="ch">Chemical</option>
-                    <option value="extc">Electronics And Telecommuncation</option>
-                    <option value="me">Mechanical</option>
-                    <option value="is">Instumentation</option>
-                    <option value="it">Information Technology</option>
-                </select>
+                    <span class="input-label">Deparment</span>
+                    <select name="deparment" id="deparment" ng-model="detail.dept" ng-change="reset()">
+                        <option value="cs" selected>Computer</option>
+                        <option value="ch">Chemical</option>
+                        <option value="extc">Electronics And Telecommuncation</option>
+                        <option value="me">Mechanical</option>
+                        <option value="is">Instumentation</option>
+                        <option value="it">Information Technology</option>
+                    </select>
                 </label>
                 <label class="item item-input item-select">
-                <span class="input-label">Year</span>
-                <select name="year" id="year" ng-model="detail.year" ng-change="providesemop()">
-                    <option value="fe" >First Year</option>
-                    <option value="se" >Second Year</option>
-                    <option value="te" >Third Year</option>
-                    <option value="be" >Final Year</option>
-                </select>
-                </label> 
-                <label class="item item-input item-select">
-                <span class="input-label">Semester</span>
-                    <select name="semester" id="semester" ng-model="detail.sem" ng-change="providenameop()">
-                    <option ng-repeat="option in detail.semoption" value="{{option.id}}">{{option.name}}</option>
+                    <span class="input-label">Year</span>
+                    <select name="year" id="year" ng-model="detail.year" ng-change="providesemop()">
+                        <option value="fe">First Year</option>
+                        <option value="se">Second Year</option>
+                        <option value="te">Third Year</option>
+                        <option value="be">Final Year</option>
                     </select>
-                </label>  
+                </label>
                 <label class="item item-input item-select">
-                <span class="input-label">Your Name</span>
-                    <select name="roll" id="roll" ng-model="detail.rollno">    
-                    <option ng-repeat="option in detail.nameoption" value="{{option.rollno}}">{{option.name}}</option>
+                    <span class="input-label">Semester</span>
+                    <select name="semester" id="semester" ng-model="detail.sem" ng-change="providenameop()">
+                        <option ng-repeat="option in detail.semoption" value="{{option.id}}">{{option.name}}</option>
+                    </select>
+                </label>
+                <label class="item item-input item-select">
+                    <span class="input-label">Your Name</span>
+                    <select name="roll" id="roll" ng-model="detail.rollno">
+                        <option ng-repeat="option in detail.nameoption" value="{{option.rollno}}">{{option.name}}</option>
                     </select>
                 </label>
                 <label class="item">
-                        <button class="button button-block button-positive" type="submit" ui-sref="studentview" ng-disabled="detail.rollno == null">Get Analytics</button>                  
-                    </label>
-                </form>              
-                    
+                    <button class="button button-block button-balanced waves-effect " type="submit" ui-sref="studentview" ng-disabled="detail.rollno == null">Get Analytics</button>
+                </label>
             </form>
-            </div>
-</ion-content>
-  </ion-view>
+        </div>
+    </ion-content>
+    <div class="bar bar-footer" style="background-color:darkgrey;color:ghostwhite">
+        <div class="center" style="vertical-align:middle;">
+            Developed by
+            <br /> Faris | Suraj
+        </div>
+    </div>
+</ion-view>
