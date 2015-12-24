@@ -1,0 +1,33 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.attendance.hazrisv"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.attendance.hazrisv"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.attendance.hazrisv"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.attendance.hazrisv"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.attendance.hazrisv"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.attendance.hazrisv"
+        },
+        "phonegap-plugin-push": {
+            "PACKAGE_NAME": "com.attendance.hazrisv"
+        }
+    },
+    "dependent_plugins": {}
+}

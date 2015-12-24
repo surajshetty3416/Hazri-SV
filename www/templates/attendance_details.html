@@ -1,0 +1,19 @@
+﻿<ion-view>
+    <ion-header-bar class="bar-balanced">
+        <h1 class="title">Atendance Stats</h1>
+    </ion-header-bar>
+    <ion-content class="has-header">
+        <div class="wrap">
+            <div class="center" style="font-size: 20px;">
+                Total Attendance : <strong>{{per.totper | number:2}} %</strong>
+            </div>
+        </div>
+        <div class="wrap">
+            <highchart id="chart2" config="theory"></highchart>
+        </div>
+        <div class="wrap">
+            <highchart id="chart3" config="practical"></highchart>
+        </div>
+        <ion-refresher pulling-text="Pull to refresh..." on-refresh="getdata()"></ion-refresher>
+    </ion-content>
+</ion-view>

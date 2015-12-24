@@ -1,0 +1,23 @@
+<ion-header-bar class="bar-balanced">
+    <h1 class="title">Notifications</h1>
+</ion-header-bar>
+
+<ion-content>
+
+    <div class="card" ng-repeat="item in items | reverse | limitTo:limit">
+        <div class="item item-divider">
+            {{item.notificationhead}}
+        </div>
+        <div class="item item-text-wrap">
+            {{item.notificationbody}}
+        </div>
+        <div class="item item-divider right positive">
+            {{item.date}}
+        </div>
+    </div>
+    <div class="center">
+        <button class="button button-clear button-balanced" ng-show="canload" ng-click="loadolder()">Load Older Notifications</button>
+    </div>
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
+    </ion-refresher>
+</ion-content>

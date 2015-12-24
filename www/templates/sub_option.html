@@ -1,0 +1,27 @@
+<ion-view>
+    <ion-header-bar class="bar-balanced">
+        <h1 class="title">Choose a Subject</h1>
+    </ion-header-bar>
+    <ion-content class="padding">
+        <div class="list">
+            <div class="item item-icon-left item-divider">Theory
+                <i class="icon ion-compose"></i>
+            </div>
+
+            <div ng-repeat="sub in suboption| filter: { theory: 'true' }">
+                <a class="item " ng-click="settsub(sub)" ui-sref="topic_details">
+                    {{sub.name}}
+                </a>
+            </div>
+            <div class="item item-icon-left item-divider">Practical
+                <i class="icon ion-paintbucket"></i>
+            </div>
+
+            <div ng-repeat="sub in suboption| filter: { practical: 'true' }">
+                <a class="item " ng-click="setpsub(sub)" ui-sref="topic_details">
+                    {{sub.name}}
+                </a>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

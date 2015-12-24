@@ -1,0 +1,18 @@
+<ion-view>
+    <ion-header-bar class="bar-balanced">
+        <h1 class="title">Topic Covered</h1>
+    </ion-header-bar>
+    <ion-content class="padding">
+        <div class="list">
+            <div class="item item-divider">{{sub.name}} ({{sub.type=='th'? 'Theory' : 'Practical' }})</div>
+            <div class="card" ng-repeat="topic in topics | reverse | limitTo:limit | filter: {content:'!!'} " ng-if="topic.content!=''">
+                <div class="item item-text-wrap">
+                    {{topic.content}}
+                </div>
+                <div class="item item-divider right balanced">
+                    {{topic.date}}
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
