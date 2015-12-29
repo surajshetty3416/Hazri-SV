@@ -15,7 +15,7 @@
             Ionic.io();
             var push = new Ionic.Push({
                 "onNotification": function (notification) {
-                    details.notification.push({ "data": notification.paload, "seen": "false" });
+                    details.notification.push({ "data": notification.payload, "seen": "false" });
                 },
                 "pluginConfig": {
                     "android": {
@@ -82,6 +82,12 @@
                 url: '/sub_option',
                 templateUrl: 'templates/sub_option.html',
                 controller: 'sub_optionCtrl'
+            })
+            
+            .state('bat_option', {
+                url: '/bat_option',
+                templateUrl: 'templates/bat_option.html',
+                controller: 'bat_optionCtrl'
             })
 
             .state('topic_details', {

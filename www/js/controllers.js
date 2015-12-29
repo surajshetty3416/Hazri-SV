@@ -74,7 +74,7 @@ angular.module('HazriSV.controllers', ['ionic', 'firebase', 'highcharts-ng'])
         
         $scope.getdata = function () {
             var alldata, pratt = [], thatt = [], prtot = [], thtot = [], prsub = [], thsub = [], totpatt = 0, atpatt = 0, tottatt = 0, attatt = 0, present = ['Present'], absent = ['Absent'];
-            $http({ method: 'GET', url: 'http://cors.io/?u=http://bvcoeportal.orgfree.com/hazrimaterial/api/index.php/' + details.dataObj.dept + '/' + details.dataObj.year + '/' + details.dataObj.sem + '/' + details.dataObj.rollno + '.json' }).
+            $http({ method: 'GET', url: 'http://cors.io/?u=http://bvcoeportal.orgfree.com/api/index.php/' + details.dataObj.dept + '/' + details.dataObj.year + '/' + details.dataObj.sem + '/' + details.dataObj.rollno + '.json' }).
                 then(function successCallback(response) {
                     alldata = response.data;
                     alldata.forEach(function (element) {
@@ -228,6 +228,32 @@ angular.module('HazriSV.controllers', ['ionic', 'firebase', 'highcharts-ng'])
     .controller("timetableCtrl", function () {
 
     })
+    
+    .controller("bat_optionCtrl", function ($scope,$ionicLoading,details) {
+        $scope.batoption = [];
+        $ionicLoading.show({
+            template: '<ion-spinner icon="android" class="spinner-balanced" ></ion-spinner>',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 250
+        });
+        var ref = new Firebase("https://hazri.firebaseio.com/studentCount/" + details.dataObj.dept);
+         ref.once("value", function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                var data = childSnapshot.val();
+                if (data.year == details.dataObj.year)
+                {
+                    $scope.batoption = data.batchno;  
+                }
+            });
+             $ionicLoading.hide();
+           });
+           
+            $scope.setbat = function (bat) {
+            details.dataObj.sub.batch = bat;
+        };
+
+    })
 
     .controller("sub_optionCtrl", function ($scope, details, $ionicLoading) {
         $scope.suboption = [];
@@ -263,7 +289,7 @@ angular.module('HazriSV.controllers', ['ionic', 'firebase', 'highcharts-ng'])
     .controller("topic_detailsCtrl", function ($scope, details, $ionicLoading) {
         $scope.sub = details.dataObj.sub;
         $scope.topics = [];
-        $scope.limit = 100;
+        $scope.limit = 50;
         $ionicLoading.show({
             template: '<ion-spinner icon="android" class="spinner-balanced" ></ion-spinner>',
             animation: 'fade-in',
@@ -277,7 +303,11 @@ angular.module('HazriSV.controllers', ['ionic', 'firebase', 'highcharts-ng'])
             snapshot.forEach(function (childSnapshot) {
                 var data = childSnapshot.val();
                 if (data.year == details.dataObj.year && data.semester == details.dataObj.sem && data.subid == $scope.sub.id && data.type == $scope.sub.type) {
+                    if(data.type == 'th')
                     $scope.topics.push({ content: data.topic, date: data.date });
+                    if(data.type == 'pr')
+                     if(data.batchno == $scope.sub.batch)
+                     $scope.topics.push({ content: data.topic, date: data.date });
                 }
             });
             $ionicLoading.hide();
