@@ -1,4 +1,4 @@
-﻿angular.module('HazriSV', ['ionic', 'ionic.service.core', 'ionic.service.analytics', 'firebase', 'HazriSV.controllers'])
+﻿angular.module('HazriSV', ['ionic','ionic.service.core',  'ionic.service.analytics', 'firebase', 'HazriSV.controllers'])
 
     .run(function ($ionicPlatform, $ionicAnalytics, details) {
         $ionicPlatform.ready(function () {
@@ -13,29 +13,29 @@
             }
 
             Ionic.io();
-            var push = new Ionic.Push({
-                "onNotification": function (notification) {
-                    details.notification.push({ "data": notification.payload, "seen": "false" });
-                },
-                "pluginConfig": {
-                    "android": {
-                    }
-                }
-            });
+            // var push = new Ionic.Push({
+            //     "onNotification": function (notification) {
+            //         details.notification.push({ "data": notification.payload, "seen": "false" });
+            //     },
+            //     "pluginConfig": {
+            //         "android": {
+            //         }
+            //     }
+            // });
 
-            var user = Ionic.User.current();
-            if (!user.id) {
-                user.id = Ionic.User.anonymousId();
-            }
-            user.set('Name', 'Hazri');
-            user.set('Bio', 'Attendance App');
-            user.save();
+            // var user = Ionic.User.current();
+            // if (!user.id) {
+            //     user.id = Ionic.User.anonymousId();
+            // }
+            // user.set('Name', 'Hazri');
+            // user.set('Bio', 'Attendance App');
+            // user.save();
 
-            var callback = function () {
-                push.addTokenToUser(user);
-                user.save();
-            };
-            push.register(callback)
+            // var callback = function () {
+            //     push.addTokenToUser(user);
+            //     user.save();
+            // };
+            // push.register(callback)
         });
     })
 

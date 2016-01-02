@@ -5,7 +5,7 @@
     <ion-content class="has-header">
         <div class="wrap">
             <div class="center" style="font-size: 20px;">
-                Total Attendance : <strong>{{per.totper | number:2}} %</strong>
+                Total Attendance : <strong><b id="percent" ng-class="per.totper>80?'ok':(per.totper<75&&per.totper>0?'defaulter':'warn')">{{per.totper | number:2}} %</b></strong>
             </div>
         </div>
         <div class="wrap">

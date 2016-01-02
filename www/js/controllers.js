@@ -55,6 +55,29 @@ angular.module('HazriSV.controllers', ['ionic', 'firebase', 'highcharts-ng'])
             details.dataObj.dept=$scope.detail.dept;
             details.dataObj.year=$scope.detail.year;
             details.dataObj.sem=$scope.detail.sem;
+            var push = new Ionic.Push({
+                "onNotification": function (notification) {
+                    details.notification.push({ "data": notification.payload, "seen": "false" });
+                },
+                "pluginConfig": {
+                    "android": {
+                    }
+                }
+            });
+
+            var user = Ionic.User.current();
+            if (!user.id) {
+                user.id = Ionic.User.anonymousId();
+            }
+            user.set('Department',details.dataObj.dept);
+            user.set('Year', details.dataObj.year);
+            user.save();
+
+            var callback = function () {
+                push.addTokenToUser(user);
+                user.save();
+            };
+            push.register(callback)
         }
         
     })

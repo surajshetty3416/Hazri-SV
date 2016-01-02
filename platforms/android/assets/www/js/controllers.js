@@ -1,18 +1,33 @@
-﻿angular.module('HazriSV.controllers', ['ionic', 'firebase', 'highcharts-ng'])
+﻿/* global Firebase */
+angular.module('HazriSV.controllers', ['ionic', 'firebase', 'highcharts-ng'])
 
     .controller('detailsCtrl', function ($scope, $ionicModal, $timeout, $firebase, $ionicLoading, details) {
         $scope.detail = {
             dept: null,
             year: null,
             rollno: null,
-            semoption: [],
-            nameoption: []
+            sem:null,
+            deptoption: [],
+            semoption: []
         };
+        $ionicLoading.show({
+            template: '<ion-spinner icon="android" class="spinner-balanced" ></ion-spinner>',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 250
+        });
+        var ref = new Firebase("https://hazri.firebaseio.com/departments");
+        ref.once("value", function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                var id = childSnapshot.key();
+                var data = childSnapshot.val();
+                $scope.detail.deptoption.push({ "name": data.name, "id": id });
+            });
+            $ionicLoading.hide();
+        });
         $scope.reset = function () {
             $scope.detail.year = null;
             $scope.detail.sem = null;
-            $scope.detail.rollno = null;
-            $scope.detail.nameoption = [];
         };
         $scope.providesemop = function () {
             if ($scope.detail.year == "fe") {
@@ -35,33 +50,56 @@
                 showBackdrop: true,
                 maxWidth: 250
             });
-            $scope.detail.nameoption = [];
-            var ref = new Firebase("https://hazri.firebaseio.com/students/" + $scope.detail.dept);
-            ref.on("child_added", function (snapshot, prevChildKey) {
-                var data = snapshot.val();
-                if (data.year == $scope.detail.year) {
-                    $scope.detail.nameoption.push({ name: data.name, rollno: data.rollno })
+        }
+        $scope.setdata = function () {
+            details.dataObj.dept=$scope.detail.dept;
+            details.dataObj.year=$scope.detail.year;
+            details.dataObj.sem=$scope.detail.sem;
+            var push = new Ionic.Push({
+                "onNotification": function (notification) {
+                    details.notification.push({ "data": notification.payload, "seen": "false" });
+                },
+                "pluginConfig": {
+                    "android": {
+                    }
                 }
             });
-            $timeout(function () {
-                $ionicLoading.hide();
-            }, 2000);
+
+            var user = Ionic.User.current();
+            if (!user.id) {
+                user.id = Ionic.User.anonymousId();
+            }
+            user.set('Department',details.dataObj.dept);
+            user.set('Year', details.dataObj.year);
+            user.save();
+
+            var callback = function () {
+                push.addTokenToUser(user);
+                user.save();
+            };
+            push.register(callback)
         }
-        details.dataObj = $scope.detail;
+        
     })
 
-    .controller("StudentViewCtrl", function ($scope, $ionicModal, $ionicPopup, $firebaseArray, $http, details) {
-        $scope.per={
+    .controller("attendance_detailsCtrl", function ($scope, $ionicLoading, $ionicModal, $ionicPopup, $firebaseArray, $http, details) {
+        $scope.per = {
             totper: null,
             prper: null,
             thper: null
         };
+                $ionicLoading.show({
+            template: '<ion-spinner icon="android" class="spinner-balanced" ></ion-spinner>',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 250
+        });
+        
         $scope.getdata = function () {
-            var alldata, pratt = [], thatt = [], prtot = [], thtot = [], prsub = [], thsub = [], totpatt = 0, atpatt = 0,tottatt = 0, attatt = 0, present = ['Present'], absent = ['Absent'];
-            $http({ method: 'GET', url: 'http://cors.io/?u=http://bvcoeportal.orgfree.com/hazrimaterial/api/index.php/' + details.dataObj.dept + '/' + details.dataObj.year + '/' + details.dataObj.sem + '/' + details.dataObj.rollno + '.json' }).
+            var alldata, pratt = [], thatt = [], prtot = [], thtot = [], prsub = [], thsub = [], totpatt = 0, atpatt = 0, tottatt = 0, attatt = 0, present = ['Present'], absent = ['Absent'];
+            $http({ method: 'GET', url: 'http://cors.io/?u=http://bvcoeportal.orgfree.com/api/index.php/' + details.dataObj.dept + '/' + details.dataObj.year + '/' + details.dataObj.sem + '/' + details.dataObj.rollno + '.json' }).
                 then(function successCallback(response) {
                     alldata = response.data;
-                    console.log(alldata);
                     alldata.forEach(function (element) {
                         if (element.type == 'pr') {
                             pratt.push(element.att);
@@ -69,7 +107,6 @@
                             prsub.push(element.sname);
                             totpatt += element.totalAtt;
                             atpatt += element.att;
-                            // console.log(totatt);
                         }
                         if (element.type == 'th') {
                             thatt.push(element.att);
@@ -81,12 +118,11 @@
                     }, this);
                     $scope.per.thper = attatt / tottatt * 100;
                     $scope.per.prper = atpatt / totpatt * 100;
-                    $scope.per.totper = (attatt+atpatt) / (tottatt+totpatt) * 100;
-                    console.log($scope.per);
-            
+                    $scope.per.totper = (attatt + atpatt) / (tottatt + totpatt) * 100;
+
                 }, function errorCallback(response) {
                 }).finally(function () {
-                    // Stop the ion-refresher from spinning
+                    $ionicLoading.hide();
                     $scope.$broadcast('scroll.refreshComplete');
                 });
 
@@ -114,7 +150,8 @@
                     min: 0,
                     title: {
                         text: 'No. of Lectures'
-                    }
+                    },
+                    allowDecimals: false
                 },
                 series: [{
                     name: 'Total Lectures',
@@ -127,7 +164,7 @@
                         pointPadding: 0.2
                     }],
                 title: {
-                    text: 'Theory Attendance' 
+                    text: 'Theory Attendance'
                 },
                 loading: false
             }
@@ -155,7 +192,8 @@
                     min: 0,
                     title: {
                         text: 'No. of Practicals'
-                    }
+                    },
+                    allowDecimals: false
                 },
                 series: [{
                     name: 'Total Lectures',
@@ -202,9 +240,133 @@
 
     })
 
-    .controller("optionCtrl", function () {
+    .controller("option_1Ctrl", function () {
 
     })
+
+    .controller("option_2Ctrl", function () {
+
+    })
+
+    .controller("timetableCtrl", function () {
+
+    })
+    
+    .controller("bat_optionCtrl", function ($scope,$ionicLoading,details) {
+        $scope.batoption = [];
+        $ionicLoading.show({
+            template: '<ion-spinner icon="android" class="spinner-balanced" ></ion-spinner>',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 250
+        });
+        var ref = new Firebase("https://hazri.firebaseio.com/studentCount/" + details.dataObj.dept);
+         ref.once("value", function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                var data = childSnapshot.val();
+                if (data.year == details.dataObj.year)
+                {
+                    $scope.batoption = data.batchno;  
+                }
+            });
+             $ionicLoading.hide();
+           });
+           
+            $scope.setbat = function (bat) {
+            details.dataObj.sub.batch = bat;
+        };
+
+    })
+
+    .controller("sub_optionCtrl", function ($scope, details, $ionicLoading) {
+        $scope.suboption = [];
+        $scope.nameoption = [];
+        $ionicLoading.show({
+            template: '<ion-spinner icon="android" class="spinner-balanced" ></ion-spinner>',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 250
+        });
+
+        var ref = new Firebase("https://hazri.firebaseio.com/subjects/" + details.dataObj.dept);
+
+        ref.once("value", function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                var key = childSnapshot.key();
+                var data = childSnapshot.val();
+                if (data.year == details.dataObj.year && data.sem == details.dataObj.sem) {
+                    $scope.suboption.push({ name: data.fullname, subid: key, theory: data.theory, practical: data.practical });
+                }
+            });
+            $ionicLoading.hide();
+        });
+
+        $scope.settsub = function (sub) {
+            details.dataObj.sub = { "name": sub.name, "type": "th", "id": sub.subid };
+        };
+        $scope.setpsub = function (sub) {
+            details.dataObj.sub = { "name": sub.name, "type": "pr", "id": sub.subid };
+        };
+    })
+
+    .controller("topic_detailsCtrl", function ($scope, details, $ionicLoading) {
+        $scope.sub = details.dataObj.sub;
+        $scope.topics = [];
+        $scope.limit = 50;
+        $ionicLoading.show({
+            template: '<ion-spinner icon="android" class="spinner-balanced" ></ion-spinner>',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 250
+        });
+
+        var ref = new Firebase("https://hazri.firebaseio.com/attendances/" + details.dataObj.dept);
+
+        ref.once("value", function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                var data = childSnapshot.val();
+                if (data.year == details.dataObj.year && data.semester == details.dataObj.sem && data.subid == $scope.sub.id && data.type == $scope.sub.type) {
+                    if(data.type == 'th')
+                    $scope.topics.push({ content: data.topic, date: data.date });
+                    if(data.type == 'pr')
+                     if(data.batchno == $scope.sub.batch)
+                     $scope.topics.push({ content: data.topic, date: data.date });
+                }
+            });
+            $ionicLoading.hide();
+        });
+
+    })
+
+    .controller("name_optionCtrl", function ($scope, details, $ionicLoading) {
+
+        $scope.nameoption = [];
+        $ionicLoading.show({
+            template: '<ion-spinner icon="android" class="spinner-balanced" ></ion-spinner>',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 250
+        });
+        
+        
+        var ref = new Firebase("https://hazri.firebaseio.com/students/" + details.dataObj.dept);
+        $scope.nameoption = [];
+        ref.once("value", function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                var data = childSnapshot.val();
+                if (data.year == details.dataObj.year) {
+                    $scope.nameoption.push({ name: data.name, rollno: data.rollno });
+                }
+            });
+            $ionicLoading.hide();
+        });
+
+        $scope.setroll = function (roll) {
+            details.dataObj.rollno = roll;
+        };
+    })
+
+
 
     .filter('reverse', function () {
         return function (items) {

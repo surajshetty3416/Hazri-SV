@@ -9789,6 +9789,18 @@ a.button {
   border-radius: 50%;
   position: relative; }
 
+.defaulter {
+  color: red; }
+
+.warn {
+  color: #f39c12; }
+
+.ok {
+  color: green; }
+
+percent {
+  font-size: 25px; }
+
 /*wave*/
 .waves-effect {
   position: relative;
