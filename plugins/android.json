@@ -27,6 +27,9 @@
         },
         "phonegap-plugin-push": {
             "PACKAGE_NAME": "com.attendance.hazrisv"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.attendance.hazrisv"
         }
     },
     "dependent_plugins": {}

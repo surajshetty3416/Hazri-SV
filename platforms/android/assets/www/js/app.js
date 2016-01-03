@@ -1,6 +1,6 @@
-﻿angular.module('HazriSV', ['ionic','ionic.service.core',  'ionic.service.analytics', 'firebase', 'HazriSV.controllers'])
+﻿angular.module('HazriSV', ['ionic', 'ionic.service.core', 'ionic.service.analytics', 'firebase', 'HazriSV.controllers'])
 
-    .run(function ($ionicPlatform, $ionicAnalytics, details) {
+    .run(function ($ionicPlatform, $ionicAnalytics) {
         $ionicPlatform.ready(function () {
             $ionicAnalytics.register();
             if (window.StatusBar) {
@@ -83,7 +83,7 @@
                 templateUrl: 'templates/sub_option.html',
                 controller: 'sub_optionCtrl'
             })
-            
+
             .state('bat_option', {
                 url: '/bat_option',
                 templateUrl: 'templates/bat_option.html',
@@ -118,16 +118,30 @@
             get: function (key, defaultValue) {
                 return $window.localStorage[key] || defaultValue;
             },
-            setObject: function (key, value) {
+            setObj: function (key, value) {
                 $window.localStorage[key] = JSON.stringify(value);
             },
-            getObject: function (key) {
+            getObj: function (key) {
                 return JSON.parse($window.localStorage[key] || '{}');
+            },
+            clear: function (key) {
+                $window.localStorage[key] = null;
+            },
+            clearObj: function (key) {
+                $window.localStorage[key] = JSON.stringify({});
+            },
+             pushObj: function (key,value) {
+                 var data=JSON.parse($window.localStorage[key] || '{}');
+                 data[Object.keys(data).length]=value; 
+                $window.localStorage[key] = JSON.stringify(data);
+            },
+            clearAll:function () {
+                $window.localStorage.clear();
             }
         }
     }])
 
-    .service('details', function () {
-        var _dataObj = {};
-        this.dataObj = _dataObj;
-    });
+    // .service('details', function () {
+    //     var _dataObj = {};
+    //     this.dataObj = _dataObj;
+    // });

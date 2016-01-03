@@ -4,12 +4,12 @@
 
 <ion-content>
 
-    <div class="card" ng-repeat="item in items | reverse | limitTo:limit">
+    <div class="card" ng-repeat="item in items | reverse| limitTo:limit">
         <div class="item item-divider">
-            {{item.notificationhead}}
+            {{item.title}}
         </div>
         <div class="item item-text-wrap">
-            {{item.notificationbody}}
+            {{item.message}}
         </div>
         <div class="item item-divider right positive">
             {{item.date}}

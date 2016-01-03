@@ -9,7 +9,7 @@
             </a>
             <a class="item item-icon-left" ui-sref="notifications">
                 <i class="icon ion-android-notifications"></i> Notifications
-                <span class="badge badge-assertive">0</span>
+                <span class="badge badge-assertive" ng-if="noti.length>0" >{{noti.length}}</span>
             </a>
         </div>
     </ion-content>

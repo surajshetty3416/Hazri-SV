@@ -9721,7 +9721,8 @@ a.button {
   transition-duration: 0s; }
 
 .wrap {
-  padding: 10px 10px 10px 10px; }
+  padding: 10px 10px 10px 10px;
+  margin-bottom: 5%; }
 
 .center {
   text-align: center;
@@ -9730,64 +9731,11 @@ a.button {
 .right {
   text-align: right; }
 
-.circle {
-  border-radius: 50%;
-  background: #f44336;
-  animation: fading 1s infinite;
-  -webkit-animation: fading 5s infinite;
-  height: 100px;
-  width: 100px;
-  margin-top: 30px;
-  margin-bottom: 50px;
-  position: relative; }
-
-@keyframes fading {
-  0% {
-    background: #D81B60; }
-  33% {
-    background: #4CAF50; }
-  66% {
-    background: #3F51B5; }
-  100% {
-    background: #D81B60; } }
-
-@-webkit-keyframes fading {
-  0% {
-    background: #D81B60; }
-  33% {
-    background: #4CAF50; }
-  66% {
-    background: #3F51B5; }
-  100% {
-    background: #D81B60; } }
-
-@keyframes opacityfading {
-  0% {
-    opacity: 0; }
-  33% {
-    opacity: 1; }
-  66% {
-    opacity: 0; }
-  100% {
-    opacity: 1; } }
-
-@-webkit-keyframes opacityfading {
-  0% {
-    opacity: 0; }
-  33% {
-    opacity: 1; }
-  66% {
-    opacity: 0; }
-  100% {
-    opacity: 1; } }
-
-.circle1 {
-  background-color: white;
-  top: 3%;
-  width: 94%;
-  height: 94%;
-  border-radius: 50%;
-  position: relative; }
+.img {
+  font-size: 100px;
+  color: slategrey;
+  margin-bottom: 5%;
+  margin-top: 5%; }
 
 .defaulter {
   color: red; }
